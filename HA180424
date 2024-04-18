@@ -1,0 +1,61 @@
+//1. Вывести компании-перевозчиков, которые доставили клиентам более 250 заказов (проекция: название_компании, ко-во заказов)
+
+SELECT
+Shippers.ShipperName,
+COUNT(*) AS total_orders
+ FROM Orders
+JOIN Shippers ON Orders.ShipperID = Shippers.ShipperID
+GROUP BY Orders.ShipperID
+HAVING
+total_orders > 250
+
+
+//2. Вывести заказы, где ко-во товаров 3 и более (проекция: номерзаказа, ко-вотовароввзаказе)
+SELECT
+Orders.OrderID,
+COUNT(*) AS total_products_in_orders
+ FROM Orders
+JOIN OrderDetails ON Orders.OrderID = OrderDetails.OrderID
+GROUP BY OrderDetails.Quantity
+HAVING
+total_products_in_orders >= 3
+ORDER BY total_products_in_orders ASC
+
+//3. Вывести минимальную стоимость товара для каждой категории, кроме категории 2 (проекция: названиекатегории, минстоимость_товара)
+
+SELECT
+Categories.CategoryName,
+MIN(Products.Price) AS min_price
+FROM Products
+JOIN Categories ON Products.CategoryID = Categories.CategoryID
+JOIN OrderDetails ON Products.CategoryID = Categories.CategoryID
+WHERE
+NOT Categories.CategoryID =2
+GROUP BY Categories.CategoryName
+
+
+//4. Вывести менеджера, который находится на 4 месте по ко-ву созданных заказов (проекция: фамилияменеджера, к-восозданных_заказов)
+SELECT 
+Employees.LastName,
+COUNT(*) AS total_orders
+FROM Orders
+JOIN Employees ON Orders.EmployeeID = Employees.EmployeeID
+GROUP BY Employees.LastName
+ORDER BY total_orders ASC
+LIMIT 1 OFFSET 3
+
+
+//5. Вывести данные о товарах от поставщиков 4 и 8 (проекция: всеимеющиесяполя, ценасоскидкой1.5процента, ценаснаценкой0.5процента)
+SELECT 
+Products.ProductID,
+Products.ProductName,
+Products.SupplierID,
+Products.CategoryID,
+Products.Unit,
+Products.Price,
+Price * .985 AS Price_sale,
+Price * 1.005 AS Price_up
+FROM Products
+JOIN Suppliers ON Products.SupplierID = Suppliers.SupplierID
+WHERE Suppliers.SupplierID IN (4, 8)
+
