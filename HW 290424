@@ -1,0 +1,41 @@
+CREATE TABLE videos (
+		id int primary key auto_increment,
+    created_at timestamp,
+    title varchar(128),
+	author_id int,
+    duration_secs int
+);
+
+CREATE TABLE users (
+	id int primary key auto_increment,
+	created_at timestamp,
+	fullname varchar(128),
+	email varchar(128),
+	country varchar(64),
+	is_blocked bool
+);
+
+CREATE TABLE reactions (
+	id int primary key auto_increment,
+	created_at timestamp,
+	reaction varchar(128),
+	user_id int,
+	video_id int
+	
+);
+CREATE TABLE comments (
+	id int primary key auto_increment,
+	created_at timestamp,
+	comment varchar(128),
+	user_id int,
+	video_id int
+	
+);
+
+INSERT INTO comments (created_at, comment, user_id, video_id)
+VALUES
+	(current_timestamp(), 'gut', 1, 2)
+
+INSERT INTO reactions (created_at, reaction, user_id, video_id)
+VALUES
+	(current_timestamp(), '5', 2, 3)
